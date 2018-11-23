@@ -1,3 +1,4 @@
-(when 'window-system
-  (set-background-color "honeydew")
-  )
+
+;; hide tool bar
+(tool-bar-mode -1)
+
