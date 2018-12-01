@@ -13,3 +13,20 @@
 
 ;; "M-t" to split window vertically
 (define-key global-map (kbd "M-t") 'split-window-below)
+
+;; "s-c" to copy
+(define-key global-map (kbd "s-c") 'kill-ring-save)
+
+;; "s-v" to yank
+(define-key global-map (kbd "s-v") 'yank)
+
+;; "s-x" to cut
+(define-key global-map (kbd "s-x") 'kill-ring)
+
+;; "s-z" to undo
+(define-key global-map (kbd "s-z") 'undo)
+
+(define-key global-map (kbd "s-{") 'previous-buffer)
+
+(define-key global-map (kbd "s-}") 'next-buffer)
+
