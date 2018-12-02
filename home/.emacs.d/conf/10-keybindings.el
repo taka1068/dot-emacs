@@ -21,7 +21,7 @@
 (define-key global-map (kbd "s-v") 'yank)
 
 ;; "s-x" to cut
-(define-key global-map (kbd "s-x") 'kill-ring)
+(define-key global-map (kbd "s-x") 'kill-region)
 
 ;; "s-z" to undo
 (define-key global-map (kbd "s-z") 'undo)
