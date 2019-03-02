@@ -9,7 +9,7 @@
     ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (color-theme-sanityinc-tomorrow spacemacs-theme auto-complete swift-mode init-loader))))
+    (markdown-mode color-theme-sanityinc-tomorrow spacemacs-theme auto-complete swift-mode init-loader))))
 
 ;; add to load path recursively
 (defun add-to-load-path (&rest paths)
