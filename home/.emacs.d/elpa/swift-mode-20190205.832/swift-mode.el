@@ -1,13 +1,13 @@
 ;;; swift-mode.el --- Major-mode for Apple's Swift programming language. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2014-2018 taku0, Chris Barrett, Bozhidar Batsov, Arthur Evstifeev
+;; Copyright (C) 2014-2019 taku0, Chris Barrett, Bozhidar Batsov, Arthur Evstifeev
 
 ;; Authors: taku0 (http://github.com/taku0)
 ;;       Chris Barrett <chris.d.barrett@me.com>
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Arthur Evstifeev <lod@pisem.net>
 ;;
-;; Version: 7.0.1
+;; Version: 7.1.0
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 ;; URL: https://github.com/swift-emacs/swift-mode
@@ -38,6 +38,7 @@
 (require 'swift-mode-font-lock)
 (require 'swift-mode-beginning-of-defun)
 (require 'swift-mode-repl)
+(require 'swift-mode-imenu)
 
 ;;;###autoload
 (defgroup swift nil
@@ -45,35 +46,39 @@
   :group 'languages
   :prefix "swift-mode:")
 
+;;;`update-directory-autoloads' does not handle `:group'.
+;;;###autoload (custom-add-load 'languages 'swift-mode)
+
+;; WORKAROUND: `cus-load' overrides `custom-loads'
+;;;###autoload (with-eval-after-load 'cus-load
+;;;###autoload   (custom-add-load 'languages 'swift-mode))
+
 ;;; Keymap
 
 (defvar swift-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map prog-mode-map)
-    (define-key map (kbd "M-j") #'swift-mode:indent-new-comment-line)
-    (define-key map (kbd "C-M-j") #'swift-mode:indent-new-comment-line)
+    (define-key map [remap indent-new-comment-line]
+      #'swift-mode:indent-new-comment-line)
     (define-key map (kbd "C-c C-z") #'swift-mode:run-repl)
     (define-key map (kbd "C-c C-f") #'swift-mode:send-buffer)
     (define-key map (kbd "C-c C-r") #'swift-mode:send-region)
-    (define-key map (kbd "C-M-a") #'swift-mode:beginning-of-defun)
-    (define-key map (kbd "C-M-e") #'swift-mode:end-of-defun)
-    (define-key map (kbd "<C-M-home>") #'swift-mode:beginning-of-defun)
-    (define-key map (kbd "<C-M-end>") #'swift-mode:end-of-defun)
-    (define-key map (kbd "ESC <C-home>") #'swift-mode:beginning-of-defun)
-    (define-key map (kbd "ESC <C-end>") #'swift-mode:end-of-defun)
-    (define-key map (kbd "C-M-h") #'swift-mode:mark-defun)
-    (define-key map (kbd "C-x n d") #'swift-mode:narrow-to-defun)
-    (define-key map (kbd "M-a") #'swift-mode:backward-sentence)
-    (define-key map (kbd "M-e") #'swift-mode:forward-sentence)
-    (define-key map (kbd "M-k") #'swift-mode:kill-sentence)
-    (define-key map (kbd "C-x DEL") #'swift-mode:backward-kill-sentence)
+    (define-key map [remap beginning-of-defun] #'swift-mode:beginning-of-defun)
+    (define-key map [remap end-of-defun] #'swift-mode:end-of-defun)
+    (define-key map [remap mark-defun] #'swift-mode:mark-defun)
+    (define-key map [remap narrow-to-defun] #'swift-mode:narrow-to-defun)
+    (define-key map [remap backward-sentence] #'swift-mode:backward-sentence)
+    (define-key map [remap forward-sentence] #'swift-mode:forward-sentence)
+    (define-key map [remap kill-sentence] #'swift-mode:kill-sentence)
+    (define-key map [remap backward-kill-sentence]
+      #'swift-mode:backward-kill-sentence)
     ;; (define-key map (kbd "???") #'swift-mode:mark-sentence)
-    (define-key map (kbd "C-x n s") #'swift-mode:narrow-to-sentence)
+    (define-key map [remap narrow-to-sentence] #'swift-mode:narrow-to-sentence)
 
     (easy-menu-define swift-menu map "Swift Mode menu"
       `("Swift"
         :help "Swift-specific Features"
-        ["Run REPL" swift-mode-run-repl
+        ["Run REPL" swift-mode:run-repl
          :help "Run Swift REPL"]
         ["Send buffer to REPL" swift-mode:send-buffer
          :help "Send the current buffer's contents to the REPL"]
@@ -137,28 +142,15 @@ Signal `scan-error' if it hits opening parentheses."
                     (swift-mode:token:end token))))
     token))
 
+(declare-function speedbar-add-supported-extension "speedbar" (extension))
 
-;; Imenu
-
-(defun swift-mode:mk-regex-for-def (keyword)
-  "Make a regex matching the identifier introduced by KEYWORD."
-  (concat "\\<" (regexp-quote keyword) "\\>"
-          "\\s *"
-          "\\("
-          "\\(?:" "\\sw" "\\|" "\\s_" "\\)" "+"
-          "\\)"))
-
-(defconst swift-mode:imenu-generic-expression
-  (list
-   (list "Functions" (swift-mode:mk-regex-for-def "func") 1)
-   (list "Classes"   (swift-mode:mk-regex-for-def "class") 1)
-   (list "Enums"     (swift-mode:mk-regex-for-def "enum") 1)
-   (list "Protocols" (swift-mode:mk-regex-for-def "protocol") 1)
-   (list "Structs"   (swift-mode:mk-regex-for-def "struct") 1)
-   (list "Extensions"   (swift-mode:mk-regex-for-def "extension") 1)
-   (list "Constants" (swift-mode:mk-regex-for-def "let") 1)
-   (list "Variables" (swift-mode:mk-regex-for-def "var") 1))
-  "Value for `imenu-generic-expression' in `swift-mode'.")
+;;;###autoload
+(defsubst swift-mode:add-supported-extension-for-speedbar ()
+  (if (fboundp 'speedbar-add-supported-extension)
+      (speedbar-add-supported-extension ".swift")
+    (add-hook 'speedbar-load-hook
+              (lambda ()
+                (speedbar-add-supported-extension ".swift")))))
 
 ;;;###autoload
 (define-derived-mode swift-mode prog-mode "Swift"
@@ -205,7 +197,7 @@ Signal `scan-error' if it hits opening parentheses."
 
   (add-hook 'post-self-insert-hook #'swift-mode:post-self-insert nil t)
 
-  (setq-local imenu-generic-expression swift-mode:imenu-generic-expression)
+  (setq-local imenu-create-index-function #'swift-mode:imenu-create-index)
 
   (setq-local beginning-of-defun-function #'swift-mode:beginning-of-defun)
   (setq-local end-of-defun-function #'swift-mode:end-of-defun)
@@ -215,12 +207,16 @@ Signal `scan-error' if it hits opening parentheses."
 
   (delete-overlay swift-mode:anchor-overlay)
 
-  (add-hook 'which-func-functions (lambda ()
-                                    (when (equal (with-current-buffer (current-buffer) major-mode) 'swift-mode)
-                                      (swift-mode:current-defun-name))))
+  (add-hook 'which-func-functions
+            (lambda ()
+              (when (equal (with-current-buffer (current-buffer) major-mode)
+                           'swift-mode)
+                (swift-mode:current-defun-name))))
   (setq-local add-log-current-defun-function #'swift-mode:current-defun-name))
 
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode))
+
+;;;###autoload (swift-mode:add-supported-extension-for-speedbar)
 
 (provide 'swift-mode)
 

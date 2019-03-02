@@ -1,6 +1,6 @@
 ;;; swift-mode-repl.el --- Run Apple's Swift processes in Emacs buffers -*- lexical-binding: t -*-
 
-;; Copyright (C) 2014-2018 taku0, Chris Barrett, Bozhidar Batsov,
+;; Copyright (C) 2014-2019 taku0, Chris Barrett, Bozhidar Batsov,
 ;;                         Arthur Evstifeev, Michael Sanders
 
 ;; Authors: taku0 (http://github.com/taku0)
@@ -9,7 +9,7 @@
 ;;       Arthur Evstifeev <lod@pisem.net>
 ;;       Michael Sanders <michael.sanders@fastmail.com>
 ;;
-;; Version: 7.0.1
+;; Version: 7.1.0
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 
@@ -45,42 +45,37 @@
   "REPL."
   :group 'swift)
 
-;;;###autoload
 (defcustom swift-mode:repl-executable
-  "xcrun swift"
+  (concat (when (executable-find "xcrun") "xcrun ") "swift")
   "Path to the Swift CLI.  The string is split by spaces, then unquoted."
   :type '(choice string (list string))
   :group 'swift-mode:repl
   :safe 'stringp)
 
-;;;###autoload
 (defcustom swift-mode:swift-package-executable
-  "xcrun swift package"
+  (concat (when (executable-find "xcrun") "xcrun ") "swift package")
   "Path to the Swift command for package manipulation.
 The string is split by spaces, then unquoted."
   :type '(choice string (list string))
   :group 'swift-mode:repl
   :safe 'stringp)
 
-;;;###autoload
 (defcustom swift-mode:swift-build-executable
-  "xcrun swift build"
+  (concat (when (executable-find "xcrun") "xcrun ") "swift build")
   "Path to the Swift command for building.
 The string is split by spaces, then unquoted."
   :type '(choice string (list string))
   :group 'swift-mode:repl
   :safe 'stringp)
 
-;;;###autoload
 (defcustom swift-mode:debugger-executable
-  "xcrun lldb"
+  (concat (when (executable-find "xcrun") "xcrun ") "lldb")
   "Path to the debugger command.
 The string is split by spaces, then unquoted."
   :type '(choice string (list string))
   :group 'swift-mode:repl
   :safe 'stringp)
 
-;;;###autoload
 (defcustom swift-mode:ios-deploy-executable
   "ios-deploy"
   "Path to ios-deploy command.
@@ -89,25 +84,22 @@ The string is split by spaces, then unquoted."
   :group 'swift-mode:repl
   :safe 'stringp)
 
-;;;###autoload
 (defcustom swift-mode:simulator-controller-executable
-  "xcrun simctl"
+  (concat (when (executable-find "xcrun") "xcrun ") "simctl")
   "Path to the simulator controller command.
 The string is split by spaces, then unquoted."
   :type '(choice string (list string))
   :group 'swift-mode:repl
   :safe 'stringp)
 
-;;;###autoload
 (defcustom swift-mode:xcodebuild-executable
-  "xcrun xcodebuild"
+  (concat (when (executable-find "xcrun") "xcrun ") "xcodebuild")
   "Path to the Xcode builder.
 The string is split by spaces, then unquoted."
   :type '(choice string (list string))
   :group 'swift-mode:repl
   :safe 'stringp)
 
-;;;###autoload
 (defcustom swift-mode:xcode-select-executable
   "xcode-select"
   "Path to the Xcode selector.
@@ -116,7 +108,6 @@ The string is split by spaces, then unquoted."
   :group 'swift-mode:repl
   :safe 'stringp)
 
-;;;###autoload
 (defcustom swift-mode:debugger-prompt-regexp "^(lldb) +\\|^[0-9]+> +"
   "Regexp to search a debugger prompt."
   :type 'string
@@ -184,7 +175,7 @@ Runs the hook `swift-repl-mode-hook' \(after the `comint-mode-hook' is run).
   (let* ((original-buffer (current-buffer))
          (cmd-string (swift-mode:command-list-to-string cmd))
          (cmd-list (swift-mode:command-string-to-list cmd))
-         (buffer-name (concat "*" cmd-string "*"))
+         (buffer-name (concat "*Swift REPL [" cmd-string "]*"))
          (buffer (get-buffer-create buffer-name)))
     (unless dont-switch
       (pop-to-buffer buffer))

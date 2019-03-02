@@ -9,7 +9,7 @@
 ;;       Arthur Evstifeev <lod@pisem.net>
 ;;       Michael Sanders <michael.sanders@fastmail.com>
 ;;
-;; Version: 7.0.1
+;; Version: 7.1.0
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 
@@ -44,7 +44,6 @@
   "Font faces."
   :group 'swift)
 
-;;;###autoload
 (defcustom swift-mode:highlight-symbols-in-standard-library
   t
   "Highlight symbols in the standard library."
@@ -52,7 +51,6 @@
   :group 'swift-mode:faces
   :safe 'booleanp)
 
-;;;###autoload
 (defcustom swift-mode:highlight-symbols-in-foundation-framework
   t
   "Highlight symbols in the Foundation framework."
@@ -60,7 +58,6 @@
   :group 'swift-mode:faces
   :safe 'booleanp)
 
-;;;###autoload
 (defface swift-mode:constant-keyword-face
   '((t . (:inherit font-lock-constant-face)))
   "Face for highlighting constant keywords
@@ -68,7 +65,6 @@
 That is, true, false, and nil."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:preprocessor-keyword-face
   '((t . (:inherit font-lock-preprocessor-face)))
   "Face for highlighting preprocessor keywords.
@@ -76,85 +72,71 @@ That is, true, false, and nil."
 Example: #if, #endif, and #selector."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:keyword-face
   '((t . (:inherit font-lock-keyword-face)))
   "Face for highlighting keywords."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-method-trailing-closure-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin methods with trailing closure."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-method-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin methods."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-function-trailing-closure-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin functions with trailing closure."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-function-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin functions."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-property-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin properties."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-constant-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin constants."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-enum-case-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin enum cases."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:build-config-keyword-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting build configuration keywords."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-type-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin types."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:builtin-precedence-group-face
   '((t . (:inherit font-lock-builtin-face)))
   "Face for highlighting builtin precedence groups."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:function-call-face
   '((t . (:inherit font-lock-function-name-face)))
   "Face for highlighting function calls."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:function-name-face
   '((t . (:inherit font-lock-function-name-face)))
   "Face for highlighting function names."
   :group 'swift-mode:faces)
 
-;;;###autoload
 (defface swift-mode:property-access-face
   '((t . (:inherit font-lock-variable-name-face)))
   "Face for highlighting property accesses."
@@ -228,8 +210,9 @@ This function does not search beyond LIMIT."
   (goto-char pos)
   (forward-comment (- (point)))
   (skip-syntax-backward "w_")
-  (looking-at
-   "\\<\\(func\\|enum\\|struct\\|class\\|protocol\\|extension\\)\\>"))
+  (and (< (point) limit)
+       (looking-at
+        "\\<\\(func\\|enum\\|struct\\|class\\|protocol\\|extension\\)\\>")))
 
 (defun swift-mode:property-access-pos-p (pos limit)
   "Return t if POS is just before the property name of a member expression.
@@ -547,9 +530,9 @@ Return nil otherwise."
   "Keywords used as constants.")
 
 (defconst swift-mode:preprocessor-keywords
-  '("#available" "#colorLiteral" "#column" "#else" "#elseif" "#endif"
-    "#fileLiteral" "#file" "#function" "#if" "#imageLiteral" "#keypath" "#line"
-    "#selector" "#sourceLocation")
+  '("#available" "#colorLiteral" "#column" "#dsohandle" "#else" "#elseif"
+    "#endif" "#error" "#file" "#fileLiteral" "#function" "#if" "#imageLiteral"
+    "#keyPath" "#line" "#selector" "#sourceLocation" "#warning")
   "Keywords that begin with a number sign (#).")
 
 (defconst swift-mode:declaration-keywords
@@ -579,8 +562,10 @@ Excludes true, false, and keywords begin with a number sign.")
   "Keywords reserved in particular contexts.")
 
 (defconst swift-mode:build-config-keywords
-  '("os" "arch" "swift" "OSX" "iOS" "watchOS" "tvOS" "i386" "x86_64" "arm"
-    "arm64" "iOSApplicationExtension" "OSXApplicationExtension")
+  '("os" "arch" "swift" "compiler" "canImport" "targetEnvironment"
+    "OSX" "macOS" "iOS" "watchOS" "tvOS" "i386" "x86_64" "arm" "arm64"
+    "iOSApplicationExtension" "OSXApplicationExtension"
+    "macOSApplicationExtension" "simulator")
   "Keywords for build configuration statements.")
 
 (defconst swift-mode:standard-precedence-groups

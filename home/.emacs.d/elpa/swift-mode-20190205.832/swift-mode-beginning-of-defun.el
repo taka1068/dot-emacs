@@ -4,7 +4,7 @@
 
 ;; Authors: taku0 (http://github.com/taku0)
 ;;
-;; Version: 7.0.1
+;; Version: 7.1.0
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 
@@ -45,7 +45,6 @@
 (require 'swift-mode-lexer)
 (require 'swift-mode-indent)
 
-;;;###autoload
 (defcustom swift-mode:mark-defun-preference 'containing
   "Preference for `swift-mode:mark-defun' for nested declarations.
 
@@ -513,7 +512,8 @@ If the point is between defuns, narrow depend on
 
 Preceding comments are included if INCLUDE-COMMENTS is non-nil.
 Interactively, the behavior depends on ‘narrow-to-defun-include-comments’."
-  (interactive (list narrow-to-defun-include-comments))
+  (interactive (list (and (boundp 'narrow-to-defun-include-comments)
+                          narrow-to-defun-include-comments)))
   (let ((region (swift-mode:narrow-to-generic-block
                  include-comments
                  #'swift-mode:end-of-defun
@@ -579,7 +579,6 @@ Both functions return t if succeeded, return nil otherwise."
         (point-was-after-mark
          (and (mark t)
               (< (mark t) (point))))
-        new-region-and-direction
         new-region
         new-direction
         last-successful-region)
@@ -797,7 +796,7 @@ Otherwise, try to mark the following one."
                   (funcall move-backward)
                   (when (/= start (point))
                     (throw 'swift-mode:found-block
-                           (list (cons start end)) 'containing))))))
+                           (list (cons start end) 'containing)))))))
           (list (cons (point-min) (point-max)) 'containing)))))))
 
 (defun swift-mode:extend-region-with-spaces (region)
@@ -1343,7 +1342,8 @@ If the point is between sentences, narrow depend on
 
 Preceding comments are included if INCLUDE-COMMENTS is non-nil.
 Interactively, the behavior depends on ‘narrow-to-defun-include-comments’."
-  (interactive (list narrow-to-defun-include-comments))
+(interactive (list (and (boundp 'narrow-to-defun-include-comments)
+                          narrow-to-defun-include-comments)))
   (let ((region (swift-mode:narrow-to-generic-block
                  include-comments
                  #'swift-mode:forward-sentence
@@ -1444,7 +1444,7 @@ of ancestors."
 
         ;; Ignored: "import" "get" "set" "willSet" "didSet"
         (t nil))))
-    (if (memq (swift-mode:token:type name-token) '(identifier operator))
+    (if (eq (swift-mode:token:type name-token) 'identifier)
         name-token
       nil)))
 

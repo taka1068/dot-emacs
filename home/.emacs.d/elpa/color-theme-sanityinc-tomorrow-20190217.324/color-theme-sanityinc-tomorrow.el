@@ -4,8 +4,7 @@
 
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: faces themes
-;; X-URL: http://github.com/purcell/color-theme-sanityinc-tomorrow
-;; URL: http://github.com/purcell/color-theme-sanityinc-tomorrow
+;; Homepage: http://github.com/purcell/color-theme-sanityinc-tomorrow
 ;; Version: 0
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -526,6 +525,10 @@ names to which it refers are bound."
       (outline-8 (:inherit nil :foreground ,aqua))
       (outline-9 (:inherit nil :foreground ,yellow))
 
+      ;; outline-minor-faces
+      (outline-minor-0 (:weight bold :background ,low-contrast-bg))
+      (outline-minor-1 (:inherit (outline-minor-0 outline-1)))
+
       ;; Parenthesis matching (built-in)
       (show-paren-match (:background ,purple :foreground ,background))
       (show-paren-mismatch (:background ,red :foreground ,background))
@@ -952,6 +955,11 @@ names to which it refers are bound."
       (jabber-activity-face (:foreground ,purple))
       (jabber-activity-personal-face (:foreground ,aqua))
 
+      ;; Cperl
+      (cperl-array-face (:foreground ,blue :weight bold))
+      (cperl-hash-face (:foreground ,red :slant italic))
+      (cperl-nonoverridable-face (:foreground ,purple))
+
       ;; js2-mode
       (js2-warning (:underline ,orange))
       (js2-error (:foreground nil :underline ,red))
@@ -1078,6 +1086,24 @@ names to which it refers are bound."
       (markdown-code-face (:inherit fixed-pitch :background ,background :foreground ,purple))
       (markdown-inline-code-face (:inherit markdown-code-face))
 
+      ;; markup
+      (markup-complex-replacement-face (:background ,background))
+      (markup-error-face (:foreground ,red :background ,background :weight bold))
+      (markup-gen-face (:foreground ,blue))
+      (markup-list-face (:foreground nil :background nil))
+      (markup-meta-face (:foreground ,comment))
+      (markup-meta-hide-face (:foreground ,comment))
+      (markup-reference-face (:inherit link))
+      (markup-secondary-text-face (:foreground ,comment))
+      (markup-title-0-face (:foreground ,blue :weight bold :underline t))
+      (markup-title-1-face (:foreground ,purple :weight bold :underline t))
+      (markup-title-2-face (:foreground ,orange :weight bold :underline t))
+      (markup-title-3-face (:foreground ,green :weight bold :underline t))
+      (markup-title-4-face (:foreground ,blue :weight bold :underline t))
+      (markup-title-5-face (:foreground ,purple :weight bold :underline t))
+      (markup-typewriter-face (:inherit shadow))
+      (markup-verbatim-face (:inherit shadow :background ,background))
+
       ;; mu4e
       (mu4e-header-highlight-face (:underline nil :inherit region))
       (mu4e-header-marks-face (:underline nil :foreground ,yellow))
@@ -1121,6 +1147,12 @@ names to which it refers are bound."
       (neo-vc-needs-merge-face (:foreground ,red))
       (neo-vc-unlocked-changes-face (:foreground ,blue :slant italic))
       (neo-vc-user-face (:foreground ,red :slant italic))
+
+      ;; nswbuff
+      (nswbuff-current-buffer-face (:foreground ,blue :weight bold :underline nil))
+      (nswbuff-default-face (:foreground ,foreground :background ,background))
+      (nswbuff-separator-face (:foreground ,comment))
+      (nswbuff-special-buffers-face (:foreground ,purple :bold nil :underline nil))
 
       ;; Powerline
       (powerline-active1 (:foreground ,foreground :background ,highlight))
@@ -1202,6 +1234,10 @@ names to which it refers are bound."
       (sx-question-list-answers (:height 1.0 :inherit sx-question-list-parent :foreground ,green))
       (sx-question-mode-accepted (:height 1.5 :inherit sx-question-mode-title :foreground ,green))
       (sx-question-mode-kbd-tag (:height 0.9 :weight semi-bold :box (:line-width 3 :style released-button :color ,contrast-bg)))
+
+      ;; transient
+      (transient-enabled-suffix (:foreground ,low-contrast-bg :background ,green :weight bold))
+      (transient-disabled-suffix (:foreground ,foreground :background ,red :weight bold))
 
       ;; twittering-mode
       (twittering-username-face (:inherit erc-pal-face))
