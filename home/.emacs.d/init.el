@@ -37,12 +37,6 @@
 (require 'init-loader)
 (init-loader-load "~/.emacs.d/conf")
 
-;;
-(cua-mode t)
-(setq cua-enable-cua-keys nil)
-(define-key global-map (kbd "C-x SPC") 'cua-set-rectangle-mark)
-
-
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
