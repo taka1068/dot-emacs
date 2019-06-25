@@ -4,7 +4,7 @@
 
 ;; Authors: taku0 (http://github.com/taku0)
 ;;
-;; Version: 7.1.0
+;; Version: 8.0.0
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 
@@ -92,8 +92,11 @@ and the region is not active."
             (setq result (swift-mode:beginning-of-defun-backward))
             (when (< (point) last-position)
               (setq arg (1- arg)))
-            (when (< 0 arg)
-              (swift-mode:backward-token-or-list))))
+            (when (and (< 0 arg)
+                       (eq 'outside-of-buffer
+                           (swift-mode:token:type
+                            (swift-mode:backward-token-or-list))))
+              (setq result nil))))
       ;; Moving forward
       (setq result (swift-mode:beginning-of-defun-forward))
       (when (and result (< pos (point)))

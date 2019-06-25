@@ -7,7 +7,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Arthur Evstifeev <lod@pisem.net>
 ;;
-;; Version: 7.1.0
+;; Version: 8.0.0
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 
@@ -463,6 +463,12 @@ Return nil otherwise." ;; FIXME pound-count
                     "fileprivate")))))
       nil)
 
+     ;; Suppress implicit semicolon after declaration starters.
+     ((member (swift-mode:token:text previous-token)
+              '("class" "struct" "protocol" "enum" "extension" "func"
+                "typealias" "associatedtype" "precedencegroup" "operator"))
+      nil)
+
      ;; Insert implicit semicolon before modifiers.
      ;;
      ;; Preceding modifiers takes precedence over this.
@@ -525,12 +531,6 @@ Return nil otherwise." ;; FIXME pound-count
               '("get" "set" "willSet" "didSet" "subscript" "init" "deinit"))
       t)
 
-     ;; Suppress implicit semicolon after declaration starters.
-     ((member (swift-mode:token:text previous-token)
-              '("class" "struct" "protocol" "enum" "extension" "func"
-                "typealias""associatedtype" "precedencegroup" "operator"))
-      nil)
-
      ;; Inserts implicit semicolon before declaration starters.
      ;; Modifiers take precedence over this.
      ;;
@@ -553,70 +553,70 @@ Return nil otherwise." ;; FIXME pound-count
                      (swift-mode:forward-token-simple)))
                   "<")))
 
-    ;; Suppress implicit semicolon after keywords that behave like method
-    ;; names.
-    ;;
-    ;; Note that binary operators take precedence over this:
-    ;;
-    ;; self . // not insert semicolon here
-    ;;   init
-    ;;
-    ;; var x {
-    ;;   set // not insert semicolon here
-    ;;     (x) {
-    ;;   }
-    ;; }
-    ;;
-    ;; var x {
-    ;;   set // inserts semicolon here
-    ;;   {
-    ;;   }
-    ;; }
-    ((member (swift-mode:token:text previous-token)
-             '("set" "willSet" "didSet" "subscript" "init" "deinit"))
-     nil)
+     ;; Suppress implicit semicolon after keywords that behave like method
+     ;; names.
+     ;;
+     ;; Note that binary operators take precedence over this:
+     ;;
+     ;; self . // not insert semicolon here
+     ;;   init
+     ;;
+     ;; var x {
+     ;;   set // not insert semicolon here
+     ;;     (x) {
+     ;;   }
+     ;; }
+     ;;
+     ;; var x {
+     ;;   set // inserts semicolon here
+     ;;   {
+     ;;   }
+     ;; }
+     ((member (swift-mode:token:text previous-token)
+              '("set" "willSet" "didSet" "subscript" "init" "deinit"))
+      nil)
 
-    ;; Inserts implicit semicolon before open square bracket.
-    ;;
-    ;; Open square bracket for array indexing cannot appear at the start of a
-    ;; line.
-    ;; https://github.com/apple/swift/blob/8d4b1cc3c47c7624d57f188d5b227152ccb03163/lib/Parse/ParseExpr.cpp#L1525
-    ;;
-    ;; Note that the following pattern (i.e. after binary-operator) is handled
-    ;; by above case.
-    ;;
-    ;; let x =
-    ;;   [
-    ;;     1
-    ;;   ]
-    ((eq (swift-mode:token:type next-token) '\[) t)
+     ;; Inserts implicit semicolon before open square bracket.
+     ;;
+     ;; Open square bracket for array indexing cannot appear at the start of a
+     ;; line.
+     ;; https://github.com/apple/swift/blob/8d4b1cc3c47c7624d57f188d5b227152ccb03163/lib/Parse/ParseExpr.cpp#L1525
+     ;;
+     ;; Note that the following pattern (i.e. after binary-operator) is handled
+     ;; by above case.
+     ;;
+     ;; let x =
+     ;;   [
+     ;;     1
+     ;;   ]
+     ((eq (swift-mode:token:type next-token) '\[) t)
 
-    ;; Inserts implicit semicolon before open parenthesis, unless it is a
-    ;; function parameter clause. Suppress implicit semicolon before function
-    ;; parameter clause.
-    ;;
-    ;; Open parenthesis for function arguments cannot appear at the start of a
-    ;; line.
-    ;; https://github.com/apple/swift/blob/8d4b1cc3c47c7624d57f188d5b227152ccb03163/lib/Parse/ParseExpr.cpp#L1251
-    ;;
-    ;; Note that the following pattern (i.e. after binary-operator) is handled
-    ;; by above case.
-    ;;
-    ;; let x =
-    ;;   (
-    ;;     1
-    ;;   )
-    ((eq (swift-mode:token:type next-token) '\()
-     (not (swift-mode:function-parameter-clause-p)))
+     ;; Inserts implicit semicolon before open parenthesis, unless it is a
+     ;; function parameter clause. Suppress implicit semicolon before function
+     ;; parameter clause.
+     ;;
+     ;; Open parenthesis for function arguments cannot appear at the start of a
+     ;; line.
+     ;; https://github.com/apple/swift/blob/8d4b1cc3c47c7624d57f188d5b227152ccb03163/lib/Parse/ParseExpr.cpp#L1251
+     ;;
+     ;; Note that the following pattern (i.e. after binary-operator) is handled
+     ;; by above case.
+     ;;
+     ;; let x =
+     ;;   (
+     ;;     1
+     ;;   )
+     ((eq (swift-mode:token:type next-token) '\()
+      (not (swift-mode:function-parameter-clause-p)))
 
-    ;; Suppress implicit semicolon after the beginning of an interpolated
-    ;; expression.
-    ((eq (swift-mode:token:type previous-token)
-         'string-chunk-before-interpolated-expression)
-     nil)
+     ;; Suppress implicit semicolon after the beginning of an interpolated
+     ;; expression.
+     ((eq (swift-mode:token:type previous-token)
+          'string-chunk-before-interpolated-expression)
+      nil)
 
-    ;; Otherwise, inserts implicit semicolon.
-    (t t))))
+     ;; Otherwise, inserts implicit semicolon.
+     (t t))))
 
 (defun swift-mode:function-parameter-clause-p ()
   "Return t if the cursor is before a function parameter clause.

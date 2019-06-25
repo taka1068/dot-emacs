@@ -1,4 +1,4 @@
-(define-package "swift-mode" "20190205.832" "Major-mode for Apple's Swift programming language."
+(define-package "swift-mode" "20190609.507" "Major-mode for Apple's Swift programming language."
   '((emacs "24.4")
     (seq "2.3"))
   :keywords

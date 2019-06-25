@@ -50,6 +50,9 @@
 
 (require 'color)
 
+(eval-when-compile (require 'ansi-color))
+(declare-function color-theme-install "color-theme")
+
 (defun sanityinc-tomorrow--interpolate (hex1 hex2 gradations which)
   (let ((c1 (color-name-to-rgb hex1))
         (c2 (color-name-to-rgb hex2)))
@@ -202,15 +205,14 @@ names to which it refers are bound."
       (line-number-current-line (:inherit line-number :foreground ,foreground :weight bold))
       (vertical-border (:foreground ,contrast-bg))
       (border (:background ,contrast-bg :foreground ,highlight))
-      (border-glyph (nil))
       (highlight (:inverse-video nil :background ,highlight))
-      (gui-element (:background ,contrast-bg :foreground ,foreground))
       (mode-line (:foreground ,foreground :background ,contrast-bg :weight normal
                               :box (:line-width 1 :color ,contrast-bg)))
       (mode-line-buffer-id (:foreground ,purple :background nil))
       (mode-line-inactive (:inherit mode-line
                                     :foreground ,comment
-                                    :background ,highlight :weight normal))
+                                    :background ,highlight
+                                    :weight normal))
       (mode-line-emphasis (:foreground ,foreground :slant italic))
       (mode-line-highlight (:foreground ,purple :box nil :weight bold))
       (minibuffer-prompt (:foreground ,blue))
@@ -651,6 +653,10 @@ names to which it refers are bound."
       (avy-lead-face-1 (:foreground ,background :background ,aqua))
       (avy-lead-face-2 (:foreground ,background :background ,orange))
 
+      ;; bm
+      (bm-face (:background ,contrast-bg :foreground ,foreground))
+      (bm-persistent-face (:background ,blue :foreground ,background))
+
       ;; bookmark+
       (bmkp-*-mark (:foreground ,background :background ,yellow))
       (bmkp->-mark (:foreground ,yellow))
@@ -849,16 +855,22 @@ names to which it refers are bound."
       ;; flx-ido
       (flx-highlight-face (:inherit nil :foreground ,yellow :weight bold :underline nil))
 
-      ;; git-gutter
+      ;; fold-this
+      (fold-this-overlay (:foreground ,green))
+
+      ;; git-gutter (git-gutter-fringe inherits from git-gutter)
+      (git-gutter:separator (:foreground ,aqua :weight bold))
       (git-gutter:modified (:foreground ,purple :weight bold))
       (git-gutter:added (:foreground ,green :weight bold))
       (git-gutter:deleted (:foreground ,red :weight bold))
       (git-gutter:unchanged (:background ,yellow))
 
-      ;; git-gutter-fringe
-      (git-gutter-fr:modified (:foreground ,purple :weight bold))
-      (git-gutter-fr:added (:foreground ,green :weight bold))
-      (git-gutter-fr:deleted (:foreground ,red :weight bold))
+      ;; git-gutter+ (git-gutter-fringe+ inherits from git-gutter+)
+      (git-gutter+-separator (:foreground ,aqua :weight bold))
+      (git-gutter+-modified (:foreground ,purple :weight bold))
+      (git-gutter+-added (:foreground ,green :weight bold))
+      (git-gutter+-deleted (:foreground ,red :weight bold))
+      (git-gutter+-unchanged (:background ,yellow))
 
       ;; git-timemachine
       (git-timemachine-minibuffer-author-face (:foreground ,purple))
@@ -1087,6 +1099,7 @@ names to which it refers are bound."
       (markdown-inline-code-face (:inherit markdown-code-face))
 
       ;; markup
+      (markup-code-face (:inherit fixed-pitch :background ,background :foreground ,purple))
       (markup-complex-replacement-face (:background ,background))
       (markup-error-face (:foreground ,red :background ,background :weight bold))
       (markup-gen-face (:foreground ,blue))
@@ -1222,18 +1235,35 @@ names to which it refers are bound."
       (slime-repl-output-face (:foreground ,blue :background ,background))
       (slime-repl-inputed-output-face (:foreground ,comment))
 
+      ;; SLY
+      (sly-error-face (:underline (:style wave :color ,red)))
+      (sly-mrepl-output-face (:foreground ,purple :background ,background))
+      (sly-note-face (:underline (:style wave :color ,green)))
+      (sly-style-warning-face (:underline (:style wave :color ,yellow)))
+      (sly-warning-face (:underline (:style wave :color ,orange)))
+      (sly-stickers-armed-face (:foreground ,background :background ,blue))
+      (sly-stickers-empty-face (:foreground ,background :background ,comment))
+      (sly-stickers-placed-face (:foreground ,background :background ,foreground))
+      (sly-stickers-recordings-face (:foreground ,background :background ,green))
+
       ;; Smartparens paren matching
       (sp-show-pair-match-face (:foreground nil :background nil :inherit show-paren-match))
       (sp-show-pair-mismatch-face (:foreground nil :background nil :inherit show-paren-mismatch))
 
-      ;; symbol-overlay
-      (symbol-overlay-default-face (:inherit highlight :underline t))
+      ;; stripe-buffer
+      (stripe-highlight (:inherit highlight))
+
+      ;; swiper
+      (swiper-isearch-current-match (:underline t))
 
       ;; sx
       (sx-question-mode-content-face (:background ,highlight))
       (sx-question-list-answers (:height 1.0 :inherit sx-question-list-parent :foreground ,green))
       (sx-question-mode-accepted (:height 1.5 :inherit sx-question-mode-title :foreground ,green))
       (sx-question-mode-kbd-tag (:height 0.9 :weight semi-bold :box (:line-width 3 :style released-button :color ,contrast-bg)))
+
+      ;; symbol-overlay
+      (symbol-overlay-default-face (:inherit highlight :underline t))
 
       ;; transient
       (transient-enabled-suffix (:foreground ,low-contrast-bg :background ,green :weight bold))
@@ -1282,6 +1312,19 @@ names to which it refers are bound."
       (cscope-function-face (:foreground ,blue))
       (cscope-line-number-face (:foreground ,red))
       (cscope-separator-face (:bold t :overline t :underline t :foreground ,purple))
+
+      ;; ztree
+      (ztreep-arrow-face (:foreground ,highlight))
+      (ztreep-diff-header-face (:foreground ,yellow :weight bold))
+      (ztreep-diff-header-small-face (:foregorund ,yellow))
+      (ztreep-diff-model-add-face (:foreground ,green))
+      (ztreep-diff-model-diff-face (:foreground ,red))
+      (ztreep-diff-model-ignored-face (:foreground ,orange))
+      (ztreep-diff-model-normal-face (:foreground ,foreground))
+      (ztreep-expand-sign-face (:foreground ,foreground))
+      (ztreep-header-face (:forground ,yellow :weight bold))
+      (ztreep-leaf-face (:foreground ,aqua))
+      (ztreep-node-face (:foreground ,foreground))
       ))))
 
 (defmacro color-theme-sanityinc-tomorrow--frame-parameter-specs ()
@@ -1342,6 +1385,7 @@ are bound."
          `(flycheck-color-mode-line-face-to-color 'mode-line-buffer-id)
          `(ansi-color-names-vector (vector ,contrast-bg ,red ,green ,yellow ,blue ,purple ,aqua ,foreground))
          '(ansi-color-faces-vector [default bold shadow italic underline bold bold-italic bold])
+         `(window-divider-mode nil)
          ))
        (provide-theme ',name))))
 

@@ -7,7 +7,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Arthur Evstifeev <lod@pisem.net>
 ;;
-;; Version: 7.1.0
+;; Version: 8.0.0
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 ;; URL: https://github.com/swift-emacs/swift-mode
@@ -178,7 +178,17 @@ Signal `scan-error' if it hits opening parentheses."
                "\\*+ "
                "\\)"
                "\\s *"))
-  (setq-local adaptive-fill-regexp comment-start-skip)
+  (setq-local adaptive-fill-regexp
+              (concat
+               "\\s *"
+               "\\(?:"
+               ;; Single-line comment
+               "//+" ":?" "\\|"
+               ;; Middle of multi-line-comment
+               "\\*+ "
+               "\\)"
+               "\\s *"))
+  (setq-local fill-indent-according-to-mode t)
   (setq-local comment-multi-line t)
 
   (setq-local parse-sexp-lookup-properties t)

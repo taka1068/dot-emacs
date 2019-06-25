@@ -34,9 +34,6 @@
 
 ;;; Code:
 
-(defmacro dyn-let (varlist fn setfaces setvars)
-  (list 'let (append varlist (funcall fn)) setfaces setvars))
-
 (defgroup spacemacs-theme nil
   "Spacemacs-theme options."
   :group 'faces)
@@ -100,12 +97,8 @@ to 'auto, tags may not be properly aligned. "
    (display-graphic-p)
    (= (tty-display-color-cells) 16777216)))
 
-(defun custom-colors-override ()
-  (mapcar (lambda (x) (list (car x) (cdr x)))
-          spacemacs-theme-custom-colors))
-
 (defun create-spacemacs-theme (variant theme-name)
-  (dyn-let ((class '((class color) (min-colors 89))) ;;              ~~ Dark ~~                              ~~ Light ~~
+  (let ((class '((class color) (min-colors 89))) ;;              ~~ Dark ~~                              ~~ Light ~~
         ;;                                                          GUI       TER                           GUI       TER
         ;; generic
         (act1          (if (eq variant 'dark) (if (true-color-p) "#222226" "#121212") (if (true-color-p) "#e7e5eb" "#d7dfff")))
@@ -167,10 +160,10 @@ to 'auto, tags may not be properly aligned. "
         (blue-bg-s     (if (eq variant 'dark) (if (true-color-p) "#2d4252" "#262626") (if (true-color-p) "#d1dcdf" "#d7d7ff")))
         (magenta       (if (eq variant 'dark) (if (true-color-p) "#a31db1" "#af00df") (if (true-color-p) "#a31db1" "#800080")))
         (yellow        (if (eq variant 'dark) (if (true-color-p) "#b1951d" "#875f00") (if (true-color-p) "#b1951d" "#875f00")))
-        (yellow-bg     (if (eq variant 'dark) (if (true-color-p) "#32322c" "#262626") (if (true-color-p) "#f6f1e1" "#ffffff")))
-        )
+        (yellow-bg     (if (eq variant 'dark) (if (true-color-p) "#32322c" "#262626") (if (true-color-p) "#f6f1e1" "#ffffff"))))
 
-        custom-colors-override
+    (cl-loop for (var . val) in spacemacs-theme-custom-colors
+             do (set var val))
 
     (custom-theme-set-faces
      theme-name
@@ -386,6 +379,7 @@ to 'auto, tags may not be properly aligned. "
      `(ess-r-signal-keyword-face ((,class (:foreground ,war))))
 
 ;;;;; evil
+     `(evil-ex-lazy-highlight ((,class (:background ,mat :foreground ,bg1))))
      `(evil-ex-substitute-matches ((,class (:background ,red-bg :foreground ,red))))
      `(evil-ex-substitute-replacement ((,class (:background ,green-bg :foreground ,green))))
 
@@ -408,6 +402,12 @@ to 'auto, tags may not be properly aligned. "
       `(evil-goggles-undo-redo-add-face ((,class (:background ,green-bg-s :foreground ,green))))
       `(evil-goggles-undo-redo-change-face ((,class (:background ,blue-bg-s :foreground ,blue))))
       `(evil-goggles-undo-redo-remove-face ((,class (:background ,red-bg-s :foreground ,red))))
+
+;;;;; evil-mc
+      `(evil-mc-cursor-bar-face ((,class (:foreground ,aqua))))
+      `(evil-mc-cursor-default-face ((,class (:background ,aqua :foreground ,bg4))))
+      `(evil-mc-cursor-hbar-face ((,class (:foreground ,aqua))))
+      `(evil-mc-region-face ((,class (:inherit highlight))))
 
 ;;;;; flycheck
      `(flycheck-error
@@ -695,7 +695,7 @@ to 'auto, tags may not be properly aligned. "
      `(notmuch-search-date ((,class (:foreground ,func))))
      `(notmuch-search-flagged-face ((,class (:weight extra-bold))))
      `(notmuch-search-non-matching-authors ((,class (:foreground ,base-dim))))
-     `(notmuch-search-unread-face ((,class (:background ,highlight-dim :box ,border))))
+     `(notmuch-search-unread-face ((,class (:background ,highlight-dim))))
      `(notmuch-tag-face ((,class (:foreground ,keyword))))
      `(notmuch-tag-flagged ((,class (:foreground ,war))))
 
@@ -827,6 +827,12 @@ to 'auto, tags may not be properly aligned. "
      `(smerge-refined-changed ((,class (:background ,blue-bg-s :foreground ,blue))))
      `(smerge-refined-removed ((,class (:background ,red-bg-s :foreground ,red))))
 
+;;;;; solaire
+     `(solaire-default-face ((,class (:inherit default :background ,bg2))))
+     `(solaire-minibuffer-face ((,class (:inherit default :background ,bg2))))
+     `(solaire-hl-line-face ((,class (:inherit hl-line :background ,bg2))))
+     `(solaire-org-hide-face ((,class (:inherit org-hide :background ,bg2))))
+
 ;;;;; spaceline
      `(spaceline-flycheck-error  ((,class (:foreground ,err))))
      `(spaceline-flycheck-info   ((,class (:foreground ,keyword))))
@@ -849,8 +855,10 @@ to 'auto, tags may not be properly aligned. "
      `(tabbar-default ((,class (:background ,bg1 :foreground ,head1 :height 0.9))))
      `(tabbar-highlight ((,class (:underline t))))
      `(tabbar-selected ((,class (:inherit tabbar-default :foreground ,func :weight bold))))
+     `(tabbar-selected-modified ((,class (:inherit tabbar-default :foreground ,red :weight bold))))
      `(tabbar-separator ((,class (:inherit tabbar-default))))
      `(tabbar-unselected ((,class (:inherit tabbar-default :background ,bg1 :slant italic :weight light))))
+     `(tabbar-unselected-modified ((,class (:inherit tabbar-unselected :background ,bg1 :foreground ,red))))
 
 ;;;;; term
      `(term ((,class (:foreground ,base :background ,bg1))))
@@ -942,22 +950,22 @@ to 'auto, tags may not be properly aligned. "
      `(ansi-color-names-vector [,bg4 ,red ,green ,yellow ,blue ,magenta ,cyan ,base])
 
 ;;;;; hl-todo
-     `(hl-todo-keyword-faces '(("TODO"   . ,war)
-                               ("NEXT"   . ,war)
-                               ("THEM"   . ,aqua)
-                               ("PROG"   . ,blue)
-                               ("OKAY"   . ,blue)
-                               ("DONT"   . ,red)
-                               ("FAIL"   . ,red)
-                               ("DONE"   . ,suc)
-                               ("NOTE"   . ,yellow)
-                               ("KLUDGE" . ,yellow)
-                               ("HACK"   . ,yellow)
-                               ("TEMP"   . ,yellow)
-                               ("FIXME"  . ,war)
-                               ("XXX"    . ,war)
-                               ("XXXX"   . ,war)
-                               ("???"    . ,war)))
+     `(hl-todo-keyword-faces '(("TODO"        . ,war)
+                               ("NEXT"        . ,war)
+                               ("THEM"        . ,aqua)
+                               ("PROG"        . ,blue)
+                               ("OKAY"        . ,blue)
+                               ("DONT"        . ,red)
+                               ("FAIL"        . ,red)
+                               ("DONE"        . ,suc)
+                               ("NOTE"        . ,yellow)
+                               ("KLUDGE"      . ,yellow)
+                               ("HACK"        . ,yellow)
+                               ("TEMP"        . ,yellow)
+                               ("FIXME"       . ,war)
+                               ("XXX+"        . ,war)
+                               ("\\?\\?\\?+"  . ,war)))
+
 
 ;;;;; pdf-tools
     `(pdf-view-midnight-colors '(,base . ,bg1)))
