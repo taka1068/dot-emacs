@@ -203,6 +203,9 @@ names to which it refers are bound."
       (linum (:background ,low-contrast-bg :foreground ,comment :italic nil :underline nil))
       (line-number (:background ,low-contrast-bg :foreground ,comment))
       (line-number-current-line (:inherit line-number :foreground ,foreground :weight bold))
+      (fill-column-indicator (:foreground ,contrast-bg :weight normal :slant normal
+                                          :underline nil :overline nil :strike-through nil
+                                          :box nil :inverse-video nil :stipple nil))
       (vertical-border (:foreground ,contrast-bg))
       (border (:background ,contrast-bg :foreground ,highlight))
       (highlight (:inverse-video nil :background ,highlight))
@@ -233,14 +236,14 @@ names to which it refers are bound."
 
       ;; ansi-term (built-in)
       (term (:foreground nil :background nil :inherit default))
-      (term-color-black   (:foreground ,foreground :background ,foreground))
-      (term-color-red     (:foreground ,red :background ,red))
-      (term-color-green   (:foreground ,green :background ,green))
-      (term-color-yellow  (:foreground ,yellow :background ,yellow))
-      (term-color-blue    (:foreground ,blue :background ,blue))
+      (term-color-black (:foreground ,background :background ,background))
+      (term-color-red (:foreground ,red :background ,red))
+      (term-color-green (:foreground ,green :background ,green))
+      (term-color-yellow (:foreground ,yellow :background ,yellow))
+      (term-color-blue (:foreground ,blue :background ,blue))
       (term-color-magenta (:foreground ,purple :background ,purple))
-      (term-color-cyan    (:foreground ,aqua :background ,aqua))
-      (term-color-white   (:foreground ,background :background ,background))
+      (term-color-cyan (:foreground ,aqua :background ,aqua))
+      (term-color-white (:foreground ,foreground :background ,foreground))
 
       ;; antlr-mode (built-in)
       (antlr-keyword (:inherit font-lock-keyword-face))
@@ -275,7 +278,11 @@ names to which it refers are bound."
       (diff-header (:foreground ,aqua :background nil))
       (diff-file-header (:foreground ,blue :background nil))
       (diff-hunk-header (:foreground ,purple))
+      (diff-indicator-added (:inherit diff-added))
+      (diff-indicator-changed (:inherit diff-changed))
+      (diff-indicator-removed (:inherit diff-removed))
       (diff-refine-added (:foreground ,aqua))
+      (diff-refine-changed (:foreground ,yellow))
       (diff-refine-removed (:foreground ,red))
 
       ;; ediff (built-in)
@@ -470,6 +477,11 @@ names to which it refers are bound."
       (info-title-4 (:weight bold))
       (info-xref-visited (:foreground ,comment :underline t))
 
+      ;; kaocha-runner
+      (kaocha-runner-error-face (:foreground ,red))
+      (kaocha-runner-success-face (:foreground ,green))
+      (kaocha-runner-warning-face (:foreground ,yellow))
+
       ;; Message-mode (built-in)
       (message-header-other (:foreground nil :background nil :weight normal))
       (message-header-subject (:inherit message-header-other :weight bold :foreground ,yellow))
@@ -493,10 +505,14 @@ names to which it refers are bound."
       (org-agenda-date (:foreground ,blue :underline nil))
       (org-agenda-done (:foreground ,green))
       (org-agenda-dimmed-todo-face (:foreground ,comment))
+      (org-block (:background ,low-contrast-bg))
+      (org-block-begin-line (:background ,background :foreground ,comment :slant italic))
+      (org-block-end-line (:background ,background :foreground ,comment :slant italic))
       (org-code (:foreground ,yellow))
       (org-column (:background ,contrast-bg))
       (org-column-title (:inherit org-column :weight bold :underline t))
       (org-date (:foreground ,blue :underline t))
+      (org-date-selected (:foreground ,aqua :inverse-video t))
       (org-document-info (:foreground ,aqua))
       (org-document-info-keyword (:foreground ,green))
       (org-document-title (:weight bold :foreground ,orange :height 1.44))
@@ -505,7 +521,16 @@ names to which it refers are bound."
       (org-footnote (:foreground ,aqua))
       (org-formula (:foreground ,red))
       (org-hide (:foreground ,background :background ,background))
+      (org-habit-alert-face (:foreground ,background :background ,yellow))
+      (org-habit-alert-future-face (:foreground ,background :background ,orange))
+      (org-habit-clear-face (:foreground ,background :background ,comment))
+      (org-habit-clear-future-face (:foreground ,background :background ,purple))
+      (org-habit-overdue-face (:foreground ,background :background ,blue))
+      (org-habit-overdue-future-face (:foreground ,background :background ,red))
+      (org-habit-ready-face (:foreground ,background :background ,aqua))
+      (org-habit-ready-future-face (:foreground ,background :background ,green))
       (org-link (:foreground ,blue :underline t))
+      (org-mode-line-clock-overrun (:inherit mode-line :background ,red))
       (org-scheduled (:foreground ,green))
       (org-scheduled-previously (:foreground ,aqua))
       (org-scheduled-today (:foreground ,green))
@@ -748,10 +773,9 @@ names to which it refers are bound."
       (debbugs-gnu-tagged (:foreground ,yellow))
 
       ;; diff-hl
-      (diff-hl-insert (:background ,green))
-      (diff-hl-change (:background ,blue))
-      (diff-hl-delete (:background ,orange))
-      (diff-hl-unknown (:background ,purple))
+      (diff-hl-insert (:foreground ,background :background ,green))
+      (diff-hl-change (:foreground ,background :background ,blue))
+      (diff-hl-delete (:foreground ,background :background ,red))
 
       ;; dired-async
       (dired-async-failures (:inherit error))
@@ -1254,7 +1278,7 @@ names to which it refers are bound."
       (stripe-highlight (:inherit highlight))
 
       ;; swiper
-      (swiper-isearch-current-match (:underline t))
+      (swiper-line-face (:underline t))
 
       ;; sx
       (sx-question-mode-content-face (:background ,highlight))
@@ -1383,7 +1407,7 @@ are bound."
          `(vc-annotate-very-old-color nil)
          `(vc-annotate-background nil)
          `(flycheck-color-mode-line-face-to-color 'mode-line-buffer-id)
-         `(ansi-color-names-vector (vector ,contrast-bg ,red ,green ,yellow ,blue ,purple ,aqua ,foreground))
+         `(ansi-color-names-vector (vector ,background ,red ,green ,yellow ,blue ,purple ,aqua ,foreground))
          '(ansi-color-faces-vector [default bold shadow italic underline bold bold-italic bold])
          `(window-divider-mode nil)
          ))
@@ -1408,7 +1432,7 @@ are bound."
           ,@(color-theme-sanityinc-tomorrow--frame-parameter-specs)
           ,@(color-theme-sanityinc-tomorrow--face-specs)))
        ;; ansi-color - comint and other modes that handle terminal color escape sequences
-       (setq ansi-color-names-vector (vector contrast-bg red green yellow blue purple aqua foreground))
+       (setq ansi-color-names-vector (vector background red green yellow blue purple aqua foreground))
        (setq ansi-color-faces-vector [default bold shadow italic underline bold bold-italic bold])))))
 
 ;;;###autoload
