@@ -9,4 +9,6 @@
   (mac-auto-ascii-mode 1)
   ;; title buffer shows current buffer
   (setq frame-title-format (format (if (buffer-file-name) "%%f" "%%b")))
+  ;; set font for gui
+  (set-default-font "Monaco-14")
 )
