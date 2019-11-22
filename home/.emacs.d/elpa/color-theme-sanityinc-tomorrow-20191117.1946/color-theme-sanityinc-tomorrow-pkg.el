@@ -1,4 +1,4 @@
-(define-package "color-theme-sanityinc-tomorrow" "20190826.1340" "A version of Chris Kempson's \"tomorrow\" themes" 'nil :keywords
+(define-package "color-theme-sanityinc-tomorrow" "20191117.1946" "A version of Chris Kempson's \"tomorrow\" themes" 'nil :keywords
   '("faces" "themes")
   :authors
   '(("Steve Purcell" . "steve@sanityinc.com"))

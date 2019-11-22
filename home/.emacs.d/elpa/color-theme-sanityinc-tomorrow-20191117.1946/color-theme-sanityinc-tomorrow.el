@@ -219,7 +219,7 @@ names to which it refers are bound."
       (mode-line-emphasis (:foreground ,foreground :slant italic))
       (mode-line-highlight (:foreground ,purple :box nil :weight bold))
       (minibuffer-prompt (:foreground ,blue))
-      (region (:background ,contrast-bg :inverse-video nil))
+      (region (:background ,contrast-bg :inverse-video nil :extend t))
       (secondary-selection (:background ,highlight))
 
       (header-line (:inherit mode-line-inactive :foreground ,aqua :background nil))
@@ -471,10 +471,10 @@ names to which it refers are bound."
       (info-menu-header (:foreground ,green :weight bold :height 1.4))
       (info-menu-star (:foreground ,yellow))
       (info-node (:foreground ,green :weight bold :slant italic))
-      (info-title-1 (:weight bold :height 1.6))
-      (info-title-2 (:weight bold :height 1.4))
-      (info-title-3 (:weight bold :height 1.2))
-      (info-title-4 (:weight bold))
+      (info-title-1 (:weight bold :height 1.4))
+      (info-title-2 (:weight bold :height 1.2))
+      (info-title-3 (:weight bold :foreground ,orange))
+      (info-title-4 (:weight bold :foreground ,purple))
       (info-xref-visited (:foreground ,comment :underline t))
 
       ;; kaocha-runner
@@ -515,7 +515,7 @@ names to which it refers are bound."
       (org-date-selected (:foreground ,aqua :inverse-video t))
       (org-document-info (:foreground ,aqua))
       (org-document-info-keyword (:foreground ,green))
-      (org-document-title (:weight bold :foreground ,orange :height 1.44))
+      (org-document-title (:weight bold :foreground ,orange :height 1.4))
       (org-done (:foreground ,green))
       (org-ellipsis (:foreground ,comment))
       (org-footnote (:foreground ,aqua))
@@ -615,6 +615,29 @@ names to which it refers are bound."
       (vhdl-speedbar-package-selected-face (:foreground ,aqua :underline t))
       (vhdl-speedbar-subprogram-face (:foreground ,green))
 
+      ;; tab-bar (built-in)
+      (tab-bar (:height 1.2 :foreground ,comment :background ,highlight))
+      (tab-bar-tab (:background ,contrast-bg
+                                 :foreground ,purple
+                                 :inverse-video nil
+                                 :box (:line-width 1 :style released-button)))
+      (tab-bar-tab-inactive (:inherit tab-bar-tab
+                                       :background ,comment
+                                       :foreground ,highlight
+                                       :inverse-video t))
+
+      ;; tab-line (built-in)
+      (tab-line (:foreground ,comment :background ,highlight))
+      (tab-line-close-highlight (:foreground ,red))
+      (tab-line-tab (:background ,contrast-bg
+                                 :foreground ,purple
+                                 :inverse-video nil
+                                 :box (:line-width 1 :style released-button)))
+      (tab-line-tab-inactive (:inherit tab-line-tab
+                                       :background ,comment
+                                       :foreground ,highlight
+                                       :inverse-video t))
+
       ;; which-function (built-in)
       (which-func (:foreground ,blue :background nil :weight bold))
 
@@ -656,11 +679,11 @@ names to which it refers are bound."
       (font-latex-italic-face (:foreground ,green :slant italic))
       (font-latex-math-face (:foreground ,purple))
       (font-latex-script-char-face (:foreground ,red))
-      (font-latex-sectioning-0-face (:foreground ,yellow :weight bold :height 1.1))
-      (font-latex-sectioning-1-face (:foreground ,yellow :weight bold :height 1.1))
-      (font-latex-sectioning-2-face (:foreground ,yellow :weight bold :height 1.1))
-      (font-latex-sectioning-3-face (:foreground ,yellow :weight bold :height 1.1))
-      (font-latex-sectioning-4-face (:foreground ,yellow :weight bold :height 1.1))
+      (font-latex-sectioning-0-face (:foreground ,yellow :weight bold :height 1.2))
+      (font-latex-sectioning-1-face (:foreground ,yellow :weight bold :height 1.2))
+      (font-latex-sectioning-2-face (:foreground ,yellow :weight bold :height 1.2))
+      (font-latex-sectioning-3-face (:foreground ,yellow :weight bold :height 1.2))
+      (font-latex-sectioning-4-face (:foreground ,yellow :weight bold :height 1.2))
       (font-latex-sectioning-5-face (:foreground ,yellow :weight bold))
       (font-latex-sedate-face (:foreground ,orange))
       (font-latex-slide-title-face (:foreground ,blue :weight bold :height 1.2))
@@ -679,8 +702,8 @@ names to which it refers are bound."
       (avy-lead-face-2 (:foreground ,background :background ,orange))
 
       ;; bm
-      (bm-face (:background ,contrast-bg :foreground ,foreground))
-      (bm-persistent-face (:background ,blue :foreground ,background))
+      (bm-face (:background ,contrast-bg :foreground ,foreground :extend t))
+      (bm-persistent-face (:background ,blue :foreground ,background :extend t))
 
       ;; bookmark+
       (bmkp-*-mark (:foreground ,background :background ,yellow))
@@ -718,6 +741,21 @@ names to which it refers are bound."
       (bmkp-t-mark (:foreground ,purple))
       (bmkp-url (:foreground ,blue :underline t))
       (bmkp-variable-list (:foreground ,green))
+
+      ;; CIDER
+      (cider-debug-code-overlay-face (:background ,contrast-bg))
+      (cider-deprecated-face (:foreground ,contrast-bg :background ,yellow))
+      (cider-enlightened-face (:inherit cider-result-overlay-face :box (:color ,orange :line-width -1)))
+      (cider-enlightened-local-face (:weight bold :foreground ,orange))
+      (cider-error-highlight-face (:underline (:style wave :color ,red) :inherit unspecified))
+      (cider-fringe-good-face (:foreground ,green))
+      (cider-instrumented-face (:box (:color ,red :line-width -1)))
+      (cider-result-overlay-face (:background ,contrast-bg :box (:line-width -1 :color ,yellow)))
+      (cider-test-error-face (:foreground ,contrast-bg :background ,orange))
+      (cider-test-failure-face (:foreground ,contrast-bg :background ,red))
+      (cider-test-success-face (:foreground ,contrast-bg :background ,green))
+      (cider-traced-face (:box ,aqua :line-width -1))
+      (cider-warning-highlight-face (:underline (:style wave :color ,yellow) :inherit unspecified))
 
       ;; Circe
       (circe-fool-face (:foreground ,comment))
@@ -761,16 +799,29 @@ names to which it refers are bound."
       (company-scrollbar-fg (:background ,contrast-bg))
       (company-echo-common (:inherit company-echo :foreground ,red))
 
+      ;; counsel-css
+      (counsel-css-selector-depth-face-1 (:foreground ,yellow))
+      (counsel-css-selector-depth-face-2 (:foreground ,orange))
+      (counsel-css-selector-depth-face-3 (:foreground ,green))
+      (counsel-css-selector-depth-face-4 (:foreground ,aqua))
+      (counsel-css-selector-depth-face-5 (:foreground ,blue))
+      (counsel-css-selector-depth-face-6 (:foreground ,purple))
+
       ;; csv-mode
       (csv-separator-face (:foreground ,orange))
 
       ;; debbugs
       (debbugs-gnu-done (:foreground ,comment))
+      (debbugs-gnu-forwarded (:foreground ,yellow))
       (debbugs-gnu-handled (:foreground ,green))
-      (debbugs-gnu-new (:foreground ,yellow))
-      (debbugs-gnu-pending (:foreground ,orange))
-      (debbugs-gnu-stale (:foreground ,blue))
-      (debbugs-gnu-tagged (:foreground ,yellow))
+      (debbugs-gnu-new (:foreground ,red))
+      (debbugs-gnu-pending (:foreground ,blue))
+      (debbugs-gnu-stale-1 (:foreground ,orange))
+      (debbugs-gnu-stale-2 (:foreground ,green))
+      (debbugs-gnu-stale-3 (:foreground ,purple))
+      (debbugs-gnu-stale-4 (:foreground ,aqua))
+      (debbugs-gnu-stale-5 (:foreground ,foreground))
+      (debbugs-gnu-tagged (:foreground ,red))
 
       ;; diff-hl
       (diff-hl-insert (:foreground ,background :background ,green))
@@ -906,20 +957,68 @@ names to which it refers are bound."
       (guide-key/key-face (:foreground ,comment))
 
       ;; helm
-      (helm-buffer-saved-out (:inherit warning))
-      (helm-buffer-size (:foreground ,yellow))
+      (helm-M-x-key (:foreground ,orange :underline t))
+      (helm-bookmark-addressbook (:foreground ,red))
+      (helm-bookmark-file (:foreground ,aqua))
+      (helm-bookmark-file-not-found (:foreground ,background))
+      (helm-bookmark-gnus (:foreground ,purple))
+      (helm-bookmark-info (:foreground ,green))
+      (helm-bookmark-man (:foreground ,orange))
+      (helm-bookmark-w3m (:foreground ,yellow))
+      (helm-buffer-archive (:foreground ,yellow))
+      (helm-buffer-directory (:foreground ,blue))
       (helm-buffer-not-saved (:foreground ,orange))
       (helm-buffer-process (:foreground ,aqua))
-      (helm-buffer-directory (:foreground ,blue))
+      (helm-buffer-saved-out (:inherit warning))
+      (helm-buffer-size (:foreground ,yellow))
+      (helm-candidate-number (:foreground ,red))
+      (helm-comint-prompts-buffer-name (:foreground ,green))
+      (helm-comint-prompts-promptidx (:foreground ,aqua))
+      (helm-delete-async-message (:foreground ,yellow))
+      (helm-eshell-prompts-buffer-name (:foreground ,green))
+      (helm-eshell-prompts-promptidx (:foreground ,aqua))
+      (helm-etags-file (:foreground ,yellow :underline t))
+      (helm-ff-denied (:foreground ,background :background ,red))
+      (helm-ff-directory (:foreground ,aqua))
       (helm-ff-dotted-directory (:foreground ,comment))
       (helm-ff-dotted-symlink-directory (:foreground ,comment))
-      (helm-ff-directory (:foreground ,aqua))
-      (helm-candidate-number (:foreground ,red))
+      (helm-ff-executable (:foreground ,green))
+      (helm-ff-invalid-symlink (:foreground ,background :background ,red))
+      (helm-ff-pipe (:foreground ,yellow :background ,background))
+      (helm-ff-prefix (:foreground ,background :background ,yellow))
+      (helm-ff-socket (:foreground ,purple))
+      (helm-ff-suid (:foreground ,background :background ,red))
+      (helm-grep-file (:foreground ,purple :underline t))
+      (helm-grep-finish (:foreground ,green))
+      (helm-grep-lineno (:foreground ,orange))
+      (helm-grep-match (:inherit match))
+      (helm-header-line-left-margin (:foreground ,background :background ,yellow))
+      (helm-lisp-completion-info (:foreground ,red))
+      (helm-lisp-show-completion (:background ,contrast-bg))
+      (helm-locate-finish (:foreground ,green))
       (helm-match (:inherit match))
-      (helm-selection (:inherit highlight))
+      (helm-moccur-buffer (:foreground ,aqua :underline t))
+      (helm-mode-prefix (:foreground ,background :background ,red))
+      (helm-prefarg (:foreground ,green))
+      (helm-resume-need-update (:background ,red))
+      (helm-selection (:inherit highlight :extend t))
       (helm-separator (:foreground ,purple))
-      (helm-source-header (:weight bold :foreground ,orange :height 1.44))
+      (helm-source-header (:weight bold :foreground ,orange :height 1.2))
+      (helm-time-zone-current (:foreground ,green))
+      (helm-time-zone-home (:foreground ,red))
+      (helm-ucs-char (:foreground ,yellow))
       (helm-visible-mark (:foreground ,blue))
+
+      ;; helm-ls-git
+      (helm-ls-git-added-copied-face (:foreground ,green))
+      (helm-ls-git-added-modified-face (:foreground ,blue))
+      (helm-ls-git-conflict-face (:foreground ,red))
+      (helm-ls-git-deleted-and-staged-face (:foreground ,purple))
+      (helm-ls-git-deleted-not-staged-face (:foreground ,comment))
+      (helm-ls-git-modified-and-staged-face (:foreground ,orange))
+      (helm-ls-git-modified-not-staged-face (:foreground ,yellow))
+      (helm-ls-git-renamed-modified-face (:foreground ,orange))
+      (helm-ls-git-untracked-face (:foreground ,aqua))
 
       ;; hl-sexp
       (hl-sexp-face (:background ,contrast-bg))
@@ -1054,26 +1153,26 @@ names to which it refers are bound."
       (magit-bisect-good (:foreground ,green))
       (magit-bisect-skip (:foreground ,orange))
       (magit-blame-date (:foreground ,red))
-      (magit-blame-heading (:foreground ,orange :background ,highlight))
+      (magit-blame-heading (:foreground ,orange :background ,highlight :extend t))
       (magit-branch-current (:foreground ,blue))
       (magit-branch-local (:foreground ,aqua))
       (magit-branch-remote (:foreground ,green))
       (magit-cherry-equivalent (:foreground ,purple))
       (magit-cherry-unmatched (:foreground ,aqua))
-      (magit-diff-added (:foreground ,green))
-      (magit-diff-added-highlight (:foreground ,green :background ,highlight))
-      (magit-diff-base (:foreground ,background :background ,orange))
-      (magit-diff-base-highlight (:foreground ,orange :background ,highlight))
-      (magit-diff-context (:foreground ,comment))
-      (magit-diff-context-highlight (:foreground ,comment :background ,highlight))
-      (magit-diff-file-heading (:foreground ,foreground))
-      (magit-diff-file-heading-highlight (:background ,contrast-bg :weight bold))
-      (magit-diff-file-heading-selection (:foreground ,orange :background ,highlight))
-      (magit-diff-hunk-heading (:foreground ,foreground :background ,contrast-bg))
-      (magit-diff-hunk-heading-highlight (:background ,contrast-bg))
-      (magit-diff-lines-heading (:foreground ,yellow :background ,red))
-      (magit-diff-removed (:foreground ,orange))
-      (magit-diff-removed-highlight (:foreground ,orange :background ,highlight))
+      (magit-diff-added (:foreground ,green :extend t))
+      (magit-diff-added-highlight (:foreground ,green :background ,highlight :extend t))
+      (magit-diff-base (:foreground ,background :background ,orange :extend t))
+      (magit-diff-base-highlight (:foreground ,orange :background ,highlight :extend t))
+      (magit-diff-context (:foreground ,comment :extend t))
+      (magit-diff-context-highlight (:foreground ,comment :background ,highlight :extend t))
+      (magit-diff-file-heading (:foreground ,foreground :extend t))
+      (magit-diff-file-heading-highlight (:background ,contrast-bg :weight bold :extend t))
+      (magit-diff-file-heading-selection (:foreground ,orange :background ,highlight :extend t))
+      (magit-diff-hunk-heading (:foreground ,foreground :background ,contrast-bg :extend t))
+      (magit-diff-hunk-heading-highlight (:background ,contrast-bg :extend t))
+      (magit-diff-lines-heading (:foreground ,yellow :background ,red :extend t))
+      (magit-diff-removed (:foreground ,orange :extend t))
+      (magit-diff-removed-highlight (:foreground ,orange :background ,highlight :extend t))
       (magit-diffstat-added (:foreground ,green))
       (magit-diffstat-removed (:foreground ,orange))
       (magit-dimmed (:foreground ,comment))
@@ -1097,9 +1196,9 @@ names to which it refers are bound."
       (magit-reflog-remote (:foreground ,aqua))
       (magit-reflog-reset (:inherit error))
       (magit-refname (:foreground ,comment))
-      (magit-section-heading (:foreground ,yellow :weight bold))
-      (magit-section-heading-selection (:foreground ,orange :weight bold))
-      (magit-section-highlight (:background ,highlight :weight bold))
+      (magit-section-heading (:foreground ,yellow :weight bold :extend t))
+      (magit-section-heading-selection (:foreground ,orange :weight bold :extend t))
+      (magit-section-highlight (:background ,highlight :weight bold :extend t))
       (magit-sequence-drop (:foreground ,red))
       (magit-sequence-head (:foreground ,blue))
       (magit-sequence-part (:foreground ,orange))
@@ -1213,6 +1312,8 @@ names to which it refers are bound."
       ;; Parenthesis dimming (parenface)
       (paren-face (:foreground ,comment :background nil))
 
+      (pulse-highlight-start-face (:background ,red))
+
       ;; Python-specific overrides
       (py-builtins-face (:foreground ,orange :weight normal))
 
@@ -1283,11 +1384,19 @@ names to which it refers are bound."
       ;; sx
       (sx-question-mode-content-face (:background ,highlight))
       (sx-question-list-answers (:height 1.0 :inherit sx-question-list-parent :foreground ,green))
-      (sx-question-mode-accepted (:height 1.5 :inherit sx-question-mode-title :foreground ,green))
-      (sx-question-mode-kbd-tag (:height 0.9 :weight semi-bold :box (:line-width 3 :style released-button :color ,contrast-bg)))
+      (sx-question-mode-accepted (:height 1.4 :inherit sx-question-mode-title :foreground ,green))
+      (sx-question-mode-kbd-tag (:weight semi-bold :box (:line-width 3 :style released-button :color ,contrast-bg)))
 
       ;; symbol-overlay
       (symbol-overlay-default-face (:inherit highlight :underline t))
+
+      ;; syslog-mode
+      (syslog-debug (:weight bold :foreground ,green))
+      (syslog-error (:weight bold :foreground ,red))
+      (syslog-hide (:foregound ,comment))
+      (syslog-info (:weight bold :foreground ,blue))
+      (syslog-su (:weight bold :foreground ,purple))
+      (syslog-warn (:weight bold :foreground ,orange))
 
       ;; transient
       (transient-enabled-suffix (:foreground ,low-contrast-bg :background ,green :weight bold))

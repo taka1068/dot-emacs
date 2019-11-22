@@ -9,7 +9,7 @@
 ;;       Arthur Evstifeev <lod@pisem.net>
 ;;       Michael Sanders <michael.sanders@fastmail.com>
 ;;
-;; Version: 8.0.0
+;; Version: 8.0.1
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 
@@ -538,7 +538,7 @@ Return nil otherwise."
 (defconst swift-mode:declaration-keywords
   '("associatedtype" "class" "deinit" "enum" "extension" "fileprivate" "func"
     "import" "init" "inout" "internal" "let" "open" "operator" "private"
-    "protocol" "public" "static" "struct" "subscript" "typealias" "var")
+    "protocol" "public" "some" "static" "struct" "subscript" "typealias" "var")
   "Keywords used in declarations.")
 
 (defconst swift-mode:statement-keywords

@@ -7,7 +7,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;;       Arthur Evstifeev <lod@pisem.net>
 ;;
-;; Version: 8.0.0
+;; Version: 8.0.1
 ;; Package-Requires: ((emacs "24.4") (seq "2.3"))
 ;; Keywords: languages swift
 
@@ -61,6 +61,8 @@
 ;;     or interpolated expressions.
 ;;     Suppose a string "aaa\( foo() )bbb\( bar() )ccc",
 ;;     "aaa\(, )bbb\(, and )ccc" are string chunks.
+;;
+;;     This is not a official term; used only in swift-mode.
 
 (declare-function swift-mode:backward-sexps-until "swift-mode-indent.el"
                   (token-types
@@ -358,7 +360,7 @@ pound signs."
 
 A position is escaped if it is proceeded by POUND-COUNT or more of pound signs
 and odd number of backslashes.
-Return nil otherwise." ;; FIXME pound-count
+Return nil otherwise."
   (let ((p position)
         (backslash-count 0))
     (while (eq (char-before p) ?#)
@@ -416,9 +418,9 @@ Return nil otherwise." ;; FIXME pound-count
        ;; Suppress implicit semicolon around keywords that cannot start or end
        ;; statements.
        (member (swift-mode:token:text previous-token)
-               '("inout" "throws" "rethrows" "in" "where"))
+               '("some" "inout" "throws" "rethrows" "in" "where"))
        (member (swift-mode:token:text next-token)
-               '("inout" "throws" "rethrows" "in" "where")))
+               '("some" "inout" "throws" "rethrows" "in" "where")))
       nil)
 
      ;; Inserts semicolon before open curly bracket.
