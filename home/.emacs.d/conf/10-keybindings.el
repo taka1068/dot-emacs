@@ -9,3 +9,16 @@
 
 (define-key global-map (kbd "s-}") 'next-buffer)
 
+
+;; "C-k" without Copying to Clipboard
+(defun my-delete-line ()
+  "Delete text from current position to end of line char.
+This command does not push text to `kill-ring'."
+  (interactive)
+  (delete-region
+   (point)
+   (progn (end-of-line 1) (point)))
+  (delete-char 1))
+
+(global-set-key (kbd "C-k") 'my-delete-line)
+
