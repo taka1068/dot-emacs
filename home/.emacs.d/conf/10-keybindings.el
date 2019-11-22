@@ -11,6 +11,7 @@
 
 
 ;; "C-k" without Copying to Clipboard
+;; Credit: http://ergoemacs.org/emacs/emacs_kill-ring.html
 (defun my-delete-line ()
   "Delete text from current position to end of line char.
 This command does not push text to `kill-ring'."
