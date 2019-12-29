@@ -19,7 +19,7 @@ This command does not push text to `kill-ring'."
   (delete-region
    (point)
    (progn (end-of-line 1) (point)))
-  (delete-char 1))
+  )
 
 (global-set-key (kbd "C-k") 'my-delete-line)
 
