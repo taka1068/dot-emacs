@@ -823,6 +823,13 @@ names to which it refers are bound."
       (debbugs-gnu-stale-5 (:foreground ,foreground))
       (debbugs-gnu-tagged (:foreground ,red))
 
+      ;; define-it
+      (define-it-headline-face (:foreground ,blue :bold t))
+      (define-it-pop-tip-color (:foreground ,comment :background ,contrast-bg))
+      (define-it-sense-number-face (:foreground ,purple :bold t))
+      (define-it-type-face (:foreground ,aqua))
+      (define-it-var-face (:foreground ,orange :bold t))
+
       ;; diff-hl
       (diff-hl-insert (:foreground ,background :background ,green))
       (diff-hl-change (:foreground ,background :background ,blue))
@@ -971,7 +978,7 @@ names to which it refers are bound."
       (helm-buffer-process (:foreground ,aqua))
       (helm-buffer-saved-out (:inherit warning))
       (helm-buffer-size (:foreground ,yellow))
-      (helm-candidate-number (:foreground ,red))
+      (helm-candidate-number (:foreground ,green))
       (helm-comint-prompts-buffer-name (:foreground ,green))
       (helm-comint-prompts-promptidx (:foreground ,aqua))
       (helm-delete-async-message (:foreground ,yellow))
@@ -999,7 +1006,7 @@ names to which it refers are bound."
       (helm-match (:inherit match))
       (helm-moccur-buffer (:foreground ,aqua :underline t))
       (helm-mode-prefix (:foreground ,background :background ,red))
-      (helm-prefarg (:foreground ,green))
+      (helm-prefarg (:foreground ,red))
       (helm-resume-need-update (:background ,red))
       (helm-selection (:inherit highlight :extend t))
       (helm-separator (:foreground ,purple))

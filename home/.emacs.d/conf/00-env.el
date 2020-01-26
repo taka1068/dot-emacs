@@ -20,6 +20,8 @@
 (when (require 'auto-complete-config nil t)
   (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
   (ac-config-default)
+  (global-auto-complete-mode t)
+  (add-to-list 'ac-modes 'rust-mode 'swift-mode)
   (setq ac-use-menu-map t)
   (setq ac-ignore-case nil))
 
